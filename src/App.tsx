@@ -1,4 +1,4 @@
-/* import Circle from "./Circle";
+import Circle from "./Circle";
 
 function App() {
   return (
@@ -10,4 +10,3 @@ function App() {
 }
 
 export default App;
- */

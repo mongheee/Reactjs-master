@@ -1,4 +1,4 @@
-/* import styled from "styled-components"; 
+import styled from "styled-components";
 
 interface ContainerProps {
   bgColor: string;
@@ -19,4 +19,3 @@ function Circle({ bgColor }: CircleProps) {
 }
 
 export default Circle;
-*/
