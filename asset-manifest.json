@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/mongheee/reactjs-master/static/js/main.f5da8ab2.js",
-    "index.html": "/mongheee/reactjs-master/index.html",
-    "main.f5da8ab2.js.map": "/mongheee/reactjs-master/static/js/main.f5da8ab2.js.map"
+    "main.js": "./static/js/main.f5da8ab2.js",
+    "index.html": "./index.html",
+    "main.f5da8ab2.js.map": "./static/js/main.f5da8ab2.js.map"
   },
   "entrypoints": [
     "static/js/main.f5da8ab2.js"
