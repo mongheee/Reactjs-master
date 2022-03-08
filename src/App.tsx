@@ -1,16 +1,22 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 /* input의 value를 state와 연결하기
  */
 function App() {
   const [value, setValue] = useState("");
-  const onChange = () => {
-    setValue("");
+  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const {
+      currentTarget: { value },
+    } = event;
+    setValue(value);
+  };
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
   };
   return (
     <div>
-      <form>
+      <form onSubmit={onSubmit}>
         <input
           value={value}
           onChange={onChange}

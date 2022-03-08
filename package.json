@@ -50,5 +50,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://mongheee.github.io/mongheee/reactjs-master.git"
+  "homepage": "https://mongheee.github.io/mongheee/reactjs-master.git",
+  "devDependencies": {
+    "@types/react-query": "^1.2.9"
+  }
 }
