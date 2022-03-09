@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/mongheee/reactjs-master.git/static/js/main.c37f5040.js",
-    "index.html": "/mongheee/reactjs-master.git/index.html",
-    "main.c37f5040.js.map": "/mongheee/reactjs-master.git/static/js/main.c37f5040.js.map"
+    "main.js": "/mongheee/reactjs-master/static/js/main.c4325b0a.js",
+    "index.html": "/mongheee/reactjs-master/index.html",
+    "main.c4325b0a.js.map": "/mongheee/reactjs-master/static/js/main.c4325b0a.js.map"
   },
   "entrypoints": [
-    "static/js/main.c37f5040.js"
+    "static/js/main.c4325b0a.js"
   ]
 }
