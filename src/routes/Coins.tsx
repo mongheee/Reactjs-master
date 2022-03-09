@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+/* import { useEffect, useState } from "react"; */
+import { Helmet } from "react-helmet-async";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoins } from "../api";
 
 const Loader = styled.h1`
   color: "#dff9fb";
@@ -27,7 +30,8 @@ const CoinsList = styled.ul``;
 
 const Coin = styled.li`
   font-size: 25px;
-  color: ${(props) => props.theme.textColor};
+  color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.textColor};
   margin-bottom: 10px;
   border-radius: 15px;
   a {
@@ -37,9 +41,9 @@ const Coin = styled.li`
   }
   &:hover {
     a {
-      color: ${(props) => props.theme.bgColor};
+      color: ${(props) => props.theme.textColor};
     }
-    background-color: ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.bgColor};
   }
 `;
 
@@ -53,7 +57,7 @@ const Img = styled.img`
   height: 35px;
   margin-right: 10px;
 `;
-interface CoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -64,7 +68,7 @@ interface CoinInterface {
 }
 
 function Coins() {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
+  /*  const [coins, setCoins] = useState<ICoin[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     (async () => {
@@ -73,17 +77,21 @@ function Coins() {
       setCoins(json.slice(0, 100));
       setLoading(false);
     })();
-  }, []);
+  }, []); */
+  const { isLoading, data } = useQuery<ICoin[]>("allCoins", fetchCoins);
   return (
     <Container>
+      <Helmet>
+        <title>Coin</title>
+      </Helmet>
       <Header>
         <Title>Coin</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <CoinsList>
-          {coins.map((coin) => (
+          {data?.slice(0, 100).map((coin) => (
             <Coin key={coin.id}>
               <Link to={`/${coin.id}`} state={coin.name}>
                 <Img

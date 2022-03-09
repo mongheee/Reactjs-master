@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+/* import { useEffect, useState } from "react"; */
+import { Helmet } from "react-helmet-async";
 import {
   useLocation,
   useParams,
@@ -7,9 +8,29 @@ import {
   Link,
   useMatch,
 } from "react-router-dom";
+import { useQuery } from "react-query";
+import { fetchCoinTickers, fetchCoinInfo } from "../api";
 import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
+import Coins from "./Coins";
+
+const Back = styled.button`
+  background-color: transparent;
+  border: none;
+  width: 33%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  span:first-child {
+    font-size: 30px;
+    font-weight: 600;
+  }
+  span:last-child {
+    font-size: 15px;
+    padding-bottom: 5px;
+  }
+`;
 
 const Overview = styled.div`
   background-color: #192a56;
@@ -19,7 +40,7 @@ const Overview = styled.div`
   border-radius: 10px;
 `;
 const OverviewItem = styled.div`
-  padding: 20px;
+  padding: 10px;
   color: ${(porps) => porps.theme.textColor};
   display: flex;
   flex-direction: column;
@@ -81,14 +102,16 @@ const Container = styled.div`
 const Header = styled.header`
   height: 10vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+  width: 100%;
+  margin-bottom: 20px;
 `;
 
 const Title = styled.h1`
   font-size: 50px;
   font-weight: 700;
   color: ${(props) => props.theme.accentColor};
+  width: 33%;
 `;
 
 interface RouteState {
@@ -151,15 +174,27 @@ interface IPriceData {
 }
 
 function Coin() {
-  const [loading, setLoading] = useState(true);
   const { coinId } = useParams();
   /*   const location = useLocation();
   const name = location.state as RouteState; */
   const { state } = useLocation() as RouteState;
-  const [info, setInfo] = useState<IInfoData>();
-  const [priceInfo, setPriceInfo] = useState<IPriceData>();
   const priceMatch = useMatch(`/${coinId}/price`);
   const chartMatch = useMatch(`/${coinId}/chart`);
+  const { isLoading: infoLoading, data: infoData } = useQuery<IInfoData>(
+    ["info", coinId],
+    () => fetchCoinInfo(coinId!)
+  );
+  const { isLoading: tickersLoading, data: tickersData } = useQuery<IPriceData>(
+    ["tickers", coinId],
+    () => fetchCoinTickers(coinId!),
+    {
+      refetchInterval: 5000,
+    }
+  );
+  console.log(tickersData);
+  /*  const [loading, setLoading] = useState(true);
+  const [info, setInfo] = useState<IInfoData>();
+  const [priceInfo, setPriceInfo] = useState<IPriceData>();
   useEffect(() => {
     (async () => {
       const infoData = await (
@@ -172,12 +207,24 @@ function Coin() {
       setPriceInfo(priceData);
       setLoading(false);
     })();
-  }, [coinId]);
+  }, [coinId]); */
+  const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
+        <Back>
+          <Link to={`/`}>
+            <span>B</span>
+            <span>ack</span>
+          </Link>
+        </Back>
         <Title>
-          {state?.name ? state.name : loading ? "Loading..." : info?.name}
+          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
         </Title>
       </Header>
       {loading ? (
@@ -187,26 +234,26 @@ function Coin() {
           <Overview>
             <OverviewItem>
               <span>Rank</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>symbol</span>
-              <span>{info?.symbol}</span>
+              <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>open source</span>
-              <span>{info?.open_source ? "YES" : "NO"}</span>
+              <span>Price</span>
+              <span>$ {tickersData?.quotes.USD.price.toFixed(2)}</span>
             </OverviewItem>
           </Overview>
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <span>total suply</span>
-              <span>{priceInfo?.total_supply}</span>
+              <span>{tickersData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
               <span>max suply</span>
-              <span>{priceInfo?.max_supply}</span>
+              <span>{tickersData?.max_supply}</span>
             </OverviewItem>
           </Overview>
           <Tabs>
@@ -218,8 +265,8 @@ function Coin() {
             </Tab>
           </Tabs>
           <Routes>
-            <Route path="price" element={<Price />} />
-            <Route path="chart" element={<Chart />} />
+            <Route path="price" element={<Price coinId={coinId!} />} />
+            <Route path="chart" element={<Chart coinId={coinId!} />} />
           </Routes>
         </>
       )}
