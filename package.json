@@ -14,7 +14,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.24",
     "apexcharts": "^3.33.2",
-    "gh-pages": "^3.2.3",
+    "gh": "^2.8.9",
     "prop-types": "^15.8.1",
     "query": "^0.2.0",
     "react": "^17.0.2",
