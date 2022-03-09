@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 const Loader = styled.h1`
   color: "#dff9fb";
-  font-weight: 700;
-  font-size: 30px;
+  font-weight: 600;
+  font-size: 20px;
   display: flex;
   justify-content: center;
 `;
@@ -32,7 +32,8 @@ const Coin = styled.li`
   border-radius: 15px;
   a {
     padding: 20px;
-    display: block;
+    display: flex;
+    align-items: center;
   }
   &:hover {
     a {
@@ -47,6 +48,11 @@ const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
 `;
 
+const Img = styled.img`
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+`;
 interface CoinInterface {
   id: string;
   name: string;
@@ -79,7 +85,12 @@ function Coins() {
         <CoinsList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link>
+              <Link to={`/${coin.id}`} state={coin.name}>
+                <Img
+                  src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                />
+                {coin.name} &rarr;
+              </Link>
             </Coin>
           ))}
         </CoinsList>
